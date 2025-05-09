@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Webhook Demo</title>
+</head>
+<body>
+  <h1>Webhook Tester</h1>
+  <form id="webhookForm">
+    <label>Name: <input type="text" name="name" required /></label><br><br>
+    <label>Email: <input type="email" name="email" required /></label><br><br>
+    <label>Message: <textarea name="message" required></textarea></label><br><br>
+    <button type="submit">Send to Webhook</button>
+  </form>
+
+  <script>
+    const webhookUrl = "https://hook.us2.make.com/pp9pgagctph5jhhjvwetl3chpup0grth";
+
+    document.getElementById("webhookForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const payload = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        message: formData.get("message")
+      };
+
+      try {
+        const response = await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          alert("Sent!");
+        } else {
+          alert("Failed to send. Check webhook URL.");
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
